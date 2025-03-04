@@ -5,7 +5,8 @@ Github Action to register an Azure Machine Learning Model in a workspace.
 Features:
 
 * Register a model in an Azure Machine Learning workspace
-* Move a model between registries
+* Checks if the model already exists in the workspace
+* Checks if the resource group and workspace exist
 
 For other Azure Machine Learning actions check out:
 
@@ -33,15 +34,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Register model in registry
-        uses: coding-kitties/register-azure-machine-learning-model@v0.1.0
+      - name: Register model in Azure Machine Learning workspace
+        uses: coding-kitties/register-azure-machine-learning-model-to-workspace@v0.1.1
         with:
-          model_name: 'model-name'
-          model_version: '1'
-          source_registry_name: 'playground-registry'
-          source_registry_resource_group: 'playground-registry-resource-group'
-          destination_registry_name: 'dev-registry'
-          destination_registry_resource_group: 'dev-resource-group'
+          model_name: '<model-name>'
+          model_version: '<model-version>'
+          resource_group: '<resource-group>'
+          workspace_name: '<workspace-name>'
+          model_path: '<path-to-model>'
 ```
 
 ## Example deployment of an Azure Machine Learning Workflow with blue/green deployments
