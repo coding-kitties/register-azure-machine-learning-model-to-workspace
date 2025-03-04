@@ -10,10 +10,10 @@ Features:
 
 For other Azure Machine Learning actions check out:
 
-* [create-azure-machine-learning-online-endpoint](https://github.com/coding-kitties/create-azure-machine-learning-online-endpoint)
-* [create-azure-machine-learning-online-deployment](https://github.com/coding-kitties/create-azure-machine-learning-online-deployment)
-* [update-azure-machine-learning-online-deployment](https://github.com/coding-kitties/update-azure-machine-learning-online-deploymentl)
-* [delete-azure-machine-learning-online-deployment](https://github.com/coding-kitties/delete-azure-machine-learning-online-deployment)
+* [create-azure-machine-learning-online-endpoint](https://github.com/marketplace/actions/create-azure-machine-learning-online-endpoint)
+* [create-azure-machine-learning-online-deployment](https://github.com/marketplace/actions/create-azure-machine-learning-deployment)
+* [move-azure-machine-learning-model-to-registry](https://github.com/marketplace/actions/move-azure-machine-learning-model-to-registry)
+* [register-azure-machine-learning-model-to-workspace](https://github.com/marketplace/actions/register-azure-machine-learning-model-to-workspace)
 
 ## Dependencies on other Github Actions
 
@@ -49,92 +49,48 @@ jobs:
 This example demonstrates an Azure Machine Learning Deployment with blue/green deployments for different environments. We use various Github Actions to create a complete workflow.
 
 ```yaml
+name: Release Azure Machine Learning Model
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.2
+    env:
+      MODEL_NAME: '<model-name>'
+      MODEL_VERSION: '<model-version>'
+      RESOURCE_GROUP: '<resource-group>'
+      WORKSPACE_NAME: '<workspace-name>'
+      ENDPOINT_NAME: '<endpoint-name>'
+      MODEL_PATH: '<path-to-model>'
 
-      - uses: Azure/login@v1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Azure CLI login
+        uses: Azure/login@v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Move model into dev registry (Will be skipped if it already exists)
-      - name: Register model in registry
-        uses: coding-kitties/register-azure-machine-learning-model@v0.1.0
+      # Register model in Azure Machine Learning workspace
+      - name: Register model in Azure Machine Learning workspace
+        uses: coding-kitties/register-azure-machine-learning-model-to-workspace@v0.1.1
         with:
-          model_name: 'model-name'
-          model_version: '1'
-          source_registry_name: 'playground-registry'
-          source_registry_resource_group: 'my-registry-resource-group'
-          destination_registry_name: 'playground-registry'
-          destination_registry_resource_group: 'my-registry-resource-group'
+          model_name: ${{ env.MODEL_NAME }}
+          model_version: ${{ env.MODEL_VERSION }}
+          resource_group: ${{ env.RESOURCE_GROUP }}
+          workspace_name: ${{ env.WORKSPACE_NAME }}
+          model_path: ${{ env.MODEL_PATH }}
 
-      # Create AML Online Endpoint in DEV (Will be skipped if it already exists)
-      - name: Create AML Online Endpoint DEV
-        uses: coding-kitties/create-azure-machine-learning-online-endpoint@v0.3.0
+      # Create Azure Machine Learning Online Endpoint
+      - name: Create AML Online Endpoint
+        uses: coding-kitties/create-aml-online-endpoint@v0.3.1
         with:
-          endpoint_name: 'dev-endpoint'
-          resource_group: 'dev-group'
-          workspace_name: 'dev-workspace'
-
-      # Deploy the new green model to DEV
-      - name: Create AML Online Endpoint Deployment DEV
-        uses: coding-kitties/create-azure-machine-learning-online-deployment@v0.3.0
-        with:
-          endpoint_name: 'dev-endpoint'
-          resource_group: 'dev-group'
-          workspace_name: 'dev-workspace'
-          deployment_yaml_file_path: 'path/to/deployment.yml'
-          model_name: 'model-name'
-          model_version: '1'
-          traffic: '{ "green": 0, "blue": 100, mirror": {"green": 20} }'
-
-      # Update green deployment traffic in DEV
-      - name: Update AML Online Endpoint Deployment traffic
-        uses: coding-kitties/update-azure-machine-learning-online-deployment@v0.1.0
-        with:
-          endpoint_name: 'my-endpoint'
-          workspace_name: 'my-workspace'
-          resource_group: 'my-resource-group'
-          traffic: '{ "green": 100, "blue": 0, mirror": {"green": 0} }'
-
-      - name: Delete AML Online Endpoint Deployment DEV
-        uses: coding-kitties/delete-azure-machine-learning-online-deployment@v0.1.0
-        with:
-          endpoint_name: 'dev-endpoint'
-          resource_group: 'dev-group'
-          workspace_name: 'dev-workspace'
-          deployment_name: 'blue'
-
-      # Move model to production registy
-      - name: Move model to production registry
-        uses: coding-kitties/register-azure-machine-learning-model@v0.1.0
-        with:
-          model_name: 'model-name'
-          model_version: '1'
-          source_registry_name: 'playground-registry'
-          source_registry_resource_group: 'my-registry-resource-group'
-          destination_registry_name: 'production-registry'
-          destination_registry_resource_group: 'my-registry-resource-group'
-
-      # Create AML Online Endpoint in PROD (Will be skipped if it already exists)
-      - name: Create AML Online Endpoint PROD
-        uses: coding-kitties/create-azure-machine-learning-online-endpoint@v0.3.0
-        with:
-          endpoint_name: 'prod-endpoint'
-          resource_group: 'prod-group'
-          workspace_name: 'prod-workspace'
-
-      # Deploy the new green model to PROD
-      - name: Create AML Online Endpoint Deployment PROD
-        uses: coding-kitties/create-azure-machine-learning-online-deployment@v0.3.0
-        with:
-          endpoint_name: 'prod-endpoint'
-          resource_group: 'prod-group'
-          workspace_name: 'prod-workspace'
-          deployment_yaml_file_path: 'path/to/deployment.yml'
-          model_name: 'model-name'
-          model_version: '1'
-          traffic: '{ "green": 0, "blue": 100, mirror": {"green": 20} }'
-å```
+          endpoint_name: ${{ env.ENDPOINT_NAME }}
+          resource_group: ${{ env.RESOURCE_GROUP }}
+          workspace_name: ${{ env.WORKSPACE_NAME }}
+```
