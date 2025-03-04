@@ -1,0 +1,33 @@
+name: 'Register Azure Machine Learning Model to Workspace'
+description: 'Register Azure Machine Learning Model to Workspace'
+author: 'Marc van Duyn'
+branding:
+  icon: 'cloud'
+  color: 'blue'
+
+inputs:
+  workspace_name:
+    description: 'Azure ML Workspace Name'
+    required: true
+  resource_group:
+    description: 'Azure Resource Group'
+    required: true
+  model_name:
+    description: 'Model Name'
+    required: true
+  model_version:
+    description: 'Model Version'
+    required: true
+  model_path:
+    description: 'Model Path'
+    required: true
+  model_description:
+    description: 'Model Description'
+    required: true
+  model_type:
+    description: 'Model Type'
+    required: true
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
