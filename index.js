@@ -62,7 +62,7 @@ async function checkIfWorkspaceExists(workspaceName, resourceGroup) {
 
         // Check if the workspace exists
         await exec.exec(`az ml workspace show --name ${workspaceName} --resource-group ${resourceGroup}`, [], options);
-        console.log("✅ Resource Group Found. Output:", output);
+        console.log("✅ Workspace Found. Output:", output);
         return true;
     } catch (error) {
         console.log(
@@ -193,9 +193,11 @@ try {
     }
 
     // Check if the workspace exists
-    console.log(`🔹 Checking if workspace '${workspaceName}' exists in resource group '${workspaceName}'...`)
+    console.log(`🔹 Checking if workspace '${workspaceName}' exists in resource group '${resourceGroup}'...`)
     ;
-    const workspaceExists = await checkIfWorkspaceExists(workspaceName, resourceGroup);
+    const workspaceExists = await checkIfWorkspaceExists(
+        workspaceName, resourceGroup
+    );
 
     if (!workspaceExists) {
         throw new Error(`Workspace '${workspaceName}' does not exist in resource group '${resourceGroup}'.`);
