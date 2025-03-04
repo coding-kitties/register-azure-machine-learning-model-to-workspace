@@ -1,7 +1,7 @@
 {
-    "name": "create-azure-machine-learning-deployment",
-    "version": "1.0.0",
-    "description": "GitHub Action to create an Azure Machine Learning deployment",
+    "name": "register-azure-machine-learning-model-to-workspace",
+    "version": "0.1.0",
+    "description": "GitHub Action to register an Azure Machine Learning model to a workspace",
     "main": "index.js",
     "type": "module",
     "dependencies": {
