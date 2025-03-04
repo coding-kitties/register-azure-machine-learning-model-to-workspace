@@ -1,8 +1,7 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const fs = require('fs');
-const exec = require('@actions/exec');
-
+import * as core from '@actions/core';
+import * as exec from '@actions/exec';
+import * as github from '@actions/github';
+import * as fs from 'fs';
 
 async function checkIfResourceGroupExists(resourceGroup) {
     /**
