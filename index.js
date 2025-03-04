@@ -154,12 +154,12 @@ async function registerModelInWorkspace(
 
 try {
     // Get the input parameters
-    const resourceGroup = core.getInput('resource-group');
-    const workspaceName = core.getInput('workspace-name');
-    const modelName = core.getInput('model-name');
-    const modelVersion = core.getInput('model-version');
-    const modelPath = core.getInput('model-path');
-    const modelType = core.getInput('model-type');
+    const resourceGroup = core.getInput('resource_group');
+    const workspaceName = core.getInput('workspace_name');
+    const modelName = core.getInput('model_name');
+    const modelVersion = core.getInput('model_version');
+    const modelPath = core.getInput('model_path');
+    const modelType = core.getInput('model_type');
 
     if(modelPath === undefined) {
         throw new Error("Model path is required.");

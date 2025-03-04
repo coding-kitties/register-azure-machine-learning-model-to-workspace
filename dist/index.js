@@ -31806,12 +31806,12 @@ async function registerModelInWorkspace(
 
 try {
     // Get the input parameters
-    const resourceGroup = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('resource-group');
-    const workspaceName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('workspace-name');
-    const modelName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model-name');
-    const modelVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model-version');
-    const modelPath = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model-path');
-    const modelType = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model-type');
+    const resourceGroup = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('resource_group');
+    const workspaceName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('workspace_name');
+    const modelName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model_name');
+    const modelVersion = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model_version');
+    const modelPath = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model_path');
+    const modelType = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('model_type');
 
     if(modelPath === undefined) {
         throw new Error("Model path is required.");
